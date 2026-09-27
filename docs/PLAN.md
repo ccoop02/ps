@@ -13,7 +13,9 @@ This plan is based on *Friend Market: Project Notes* (Sep 26, 2026) and the *Pee
 | Beta size | 5–20 people, all 18+, play money |
 | Starting cash | **$100 play cash** per person in the demo. In the commercial version, users deposit real cash. |
 | Business model | The platform earns a **commission on every trade** |
-| Who posts on a page | **Only the subject** posts on their own page. Anyone who trades the stock can attach a note, and notes show in a separate Trade notes feed on the page. |
+| Who posts on a page | **Only the subject** posts on their own page, and each post belongs to that person's stock. **Everyone** can see every post, both on the stock page and in the home News feed. Anyone who trades the stock can attach a note, and notes show in a separate Trade notes feed on the page. |
+| Bullish/Bearish tag | Every post shows a Bullish/Bearish tag decided by **other members' votes**. The poster can't vote on their own posts. |
+| Trading fee | Varies with trade size and goes **100% to the platform**. The subject gets no share. The admin can **turn fees on and off** during the beta. |
 | Metrics | All five fun metrics at launch: vibe vote, superlatives, hangout attendance, feed activity and streaks, weighted equally |
 
 ---
@@ -41,7 +43,7 @@ What changes is **how many separate systems we run**. The original stack (Expo a
 
 **Expected cost during beta: $0/month**, plus an optional domain (~$12/year). At commercial launch expect roughly $45/month to start (Vercel Pro + Supabase Pro), before video, KYC and legal costs.
 
-**Not changing:** the bonding curve, fee split, treasury-with-caps design, off-chain tokens, trades stored as immutable events with an engine version, and the Phase 2–4 roadmap.
+**Not changing:** the bonding curve, treasury-with-caps design, off-chain tokens, trades stored as immutable events with an engine version, and the Phase 2–4 roadmap.
 
 ---
 
@@ -66,8 +68,13 @@ These are the points where the notes contradict themselves or where the math beh
 
 9. **$100 of play cash changes the scale.** The designs show prices around $40 and trade buttons for $10/$50/$100/$250, which assume much larger balances.
    **Default:** set the curve constant k so typical listing prices land around $1–$5 and a $10 buy visibly moves the price. Change the quick-amount buttons to $1/$5/$10/$25. Tune k during the two-week test.
-10. **Only the subject posts on their page**, so the design's "Post an update about Jake" box is shown only to Jake. Other people's opinions go in trade notes. The home News widget shows subjects' own posts.
+10. **Only the subject posts on their page**, so the design's "Post an update about Jake" box is shown only to Jake. Other people's opinions go in trade notes. The home News feed shows every member's posts to everyone, each labeled with its stock.
     Members can still react and comment on posts. The subject can report trade notes on their page, and an admin can hide them. The "Feed activity" metric counts the subject's posts plus the reactions and comments those posts get.
+
+11. **Sliding trading fee.** The fee is a percentage that depends on trade size and goes to a platform account.
+    **Default:** smaller trades pay a higher rate. Under $5 pays 5%, $5–$25 pays 3%, and over $25 pays 2%. The admin can edit the tiers and turn fees on and off from the admin page. Each trade stores the rate it paid, so history stays accurate when the tiers change. While fees are off, trades cost 0%.
+12. **Bullish/Bearish voting on posts.** Every member except the poster can vote Bullish or Bearish on a post, one vote each, changeable. The post shows the vote split, e.g. "Bullish 7 · 2", and its tag reflects the majority. The tag reads "No votes yet" until someone votes. The poster sees the results but gets no vote buttons.
+    **Default:** in the beta the votes are display-only and don't feed the fundamentals score. This can be added later as a metric.
 
 ---
 
@@ -96,13 +103,13 @@ The group gets the app only after milestone 13. You can still test every milesto
 | # | Milestone | What you'll be able to test |
 | --- | --- | --- |
 | 0 | **Foundation.** Monorepo, Next.js, Supabase and Vercel projects, CI, brand tokens and fonts, app shell (top bar and nav from the design) | A live link showing the empty Peerstock shell in the brand colors |
-| 1 | **Pricing package.** Curve, fees (subject/platform split), fixed-point math, treasury sizing, daily and per-event caps, with heavy tests including the reserve-invariant check | A readable test report, plus a small "curve playground" page to try trade sizes |
+| 1 | **Pricing package.** Curve, sliding fee tiers with an on/off switch, fixed-point math, treasury sizing, daily and per-event caps, with heavy tests including the reserve-invariant check | A readable test report, plus a small "curve playground" page to try trade sizes |
 | 2 | **Database.** Full Phase 1 schema, row-level security, migrations, a seed script with Jake, Dani, Noah and the others, and past trades | The seeded data appears in the app |
 | 3 | **Accounts and group.** Sign-in (magic link / Google), profile and avatar, invite-only group through an invite link, starting play cash, admin role | You invite a test account and it joins the group |
 | 4 | **Listing.** Opt-in consent, ticker choice, starting price from the initial score (offset v), treasury seed position, delist and relist | A friend opts in, gets $TICKER and appears as a stock |
-| 5 | **Trading.** Live quote, buy/sell with optional 140-character note, locked transactions, trades and price ticks, fee split, cash ledger, admin "balances reconcile" check | Buy and sell. The numbers match the quote and the balances always add up. |
+| 5 | **Trading.** Live quote, buy/sell with optional 140-character note, locked transactions, trades and price ticks, platform fee account, cash ledger, admin fee on/off switch and tier editor, admin "balances reconcile" check | Buy and sell. The numbers match the quote and the balances always add up. |
 | 6 | **Stock page.** Header, chart with 1D to All ranges and markers, stat tiles, trade panel, trade feed card, your position, and the Overview/Socials/Metrics/Markets/Holders tabs | Matches page 2 of the design |
-| 7 | **Feed and trade notes.** Subject-only text, photo and video posts with price at post, reactions and comments from members, and a separate Trade notes feed on each stock page. Trade notes can be reported; admins can hide them. | Post on your own page. Others react, comment and leave trade notes. |
+| 7 | **Feed and trade notes.** Subject-only text, photo and video posts with price at post, visible to everyone in the News feed. Members vote Bullish/Bearish on others' posts (not their own), react and comment. There is also and a separate Trade notes feed on each stock page. Trade notes can be reported; admins can hide them. | Post on your own page. Others see it in News, vote Bullish/Bearish, react, comment and leave trade notes. |
 | 8 | **Metrics.** Vibe votes (one change per 24 h), superlative polls, hangouts and check-ins, feed activity, streaks with photo proof, smoothed 0–100 scoring, weights with a group vote to change them, Metrics tab | Vote, and watch the fundamentals score update right away |
 | 9 | **Treasury.** 15-minute batch run, score-driven trades, 10%/day and 5%/event caps, treasury ledger, chart markers, dividend payout path | Change votes and see a capped treasury trade and a marker appear on the chart |
 | 10 | **Realtime.** Live prices, trade feed, news and notifications with no page refresh | Two phones side by side, and a trade on one shows on the other |
@@ -127,8 +134,10 @@ The group gets the app only after milestone 13. You can still test every milesto
 
 ## 6. Open questions
 
-Answered Sep 27, 2026: $100 starting play cash, the treasury fix, subject-only posting with trade notes, all five metrics, everyone 18+, and the name Peerstock for now. Still open (defaults in brackets):
+Answered Sep 27, 2026: $100 starting play cash, the treasury fix, subject-only posting that everyone can see, trade notes, all five metrics, everyone 18+, and the name Peerstock for now. The trading fee varies with trade size, goes only to the platform, and the admin can turn it on and off. Posts carry a Bullish/Bearish tag that other members vote on.
 
-1. The notes split the 5% fee between the subject and the platform. Should the subject keep a share now that the platform's revenue is the commission? [Yes: 2% to the subject, 3% to the platform, adjustable]
-2. Can the subject tag their own posts bullish or bearish? [No: drop the tag on posts. Trade notes already show whether the writer bought or sold.]
+Still open (defaults in brackets):
+
+1. Fee tiers. [Under $5: 5%, $5–$25: 3%, over $25: 2%; editable by the admin]
+2. Should post sentiment votes feed the fundamentals score? [Not in the beta; revisit after the two-week test]
 3. Accounts you'll need to create when we reach milestone 0 (I'll walk you through each): **Supabase**, **Vercel** (sign in with GitHub) and optionally **Sentry**. All free.
