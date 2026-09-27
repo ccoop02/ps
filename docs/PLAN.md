@@ -10,7 +10,11 @@ This plan is based on *Friend Market: Project Notes* (Sep 26, 2026) and the *Pee
 | Who builds | Claude writes and fixes the code. Craig directs and tests. |
 | Budget | As cheap as possible: $0/month to start |
 | Beta scope | All of Phase 1 before the group starts using it |
-| Beta size | 5–20 people, play money |
+| Beta size | 5–20 people, all 18+, play money |
+| Starting cash | **$100 play cash** per person in the demo. In the commercial version, users deposit real cash. |
+| Business model | The platform earns a **commission on every trade** |
+| Who posts on a page | **Only the subject** posts on their own page. Anyone who trades the stock can attach a note, and notes show in a separate Trade notes feed on the page. |
+| Metrics | All five fun metrics at launch: vibe vote, superlatives, hangout attendance, feed activity and streaks, weighted equally |
 
 ---
 
@@ -60,6 +64,11 @@ These are the points where the notes contradict themselves or where the math beh
    **Default:** build the layout slots now and show "Coming soon" until Phase 2.
 8. **Instagram embeds.** Instagram's official embed API needs an approved Meta app. The standard copy-paste embed and profile links work without one, so that's what the beta uses.
 
+9. **$100 of play cash changes the scale.** The designs show prices around $40 and trade buttons for $10/$50/$100/$250, which assume much larger balances.
+   **Default:** set the curve constant k so typical listing prices land around $1–$5 and a $10 buy visibly moves the price. Change the quick-amount buttons to $1/$5/$10/$25. Tune k during the two-week test.
+10. **Only the subject posts on their page**, so the design's "Post an update about Jake" box is shown only to Jake. Other people's opinions go in trade notes. The home News widget shows subjects' own posts.
+    Members can still react and comment on posts. The subject can report trade notes on their page, and an admin can hide them. The "Feed activity" metric counts the subject's posts plus the reactions and comments those posts get.
+
 ---
 
 ## 3. Repository layout
@@ -93,7 +102,7 @@ The group gets the app only after milestone 13. You can still test every milesto
 | 4 | **Listing.** Opt-in consent, ticker choice, starting price from the initial score (offset v), treasury seed position, delist and relist | A friend opts in, gets $TICKER and appears as a stock |
 | 5 | **Trading.** Live quote, buy/sell with optional 140-character note, locked transactions, trades and price ticks, fee split, cash ledger, admin "balances reconcile" check | Buy and sell. The numbers match the quote and the balances always add up. |
 | 6 | **Stock page.** Header, chart with 1D to All ranges and markers, stat tiles, trade panel, trade feed card, your position, and the Overview/Socials/Metrics/Markets/Holders tabs | Matches page 2 of the design |
-| 7 | **Feed.** Text, photo and video posts, bull/bear tag, price at post, reactions, comments, the subject can hide or report posts, report and hide on trade notes | Post on someone's page, react and comment |
+| 7 | **Feed and trade notes.** Subject-only text, photo and video posts with price at post, reactions and comments from members, and a separate Trade notes feed on each stock page. Trade notes can be reported; admins can hide them. | Post on your own page. Others react, comment and leave trade notes. |
 | 8 | **Metrics.** Vibe votes (one change per 24 h), superlative polls, hangouts and check-ins, feed activity, streaks with photo proof, smoothed 0–100 scoring, weights with a group vote to change them, Metrics tab | Vote, and watch the fundamentals score update right away |
 | 9 | **Treasury.** 15-minute batch run, score-driven trades, 10%/day and 5%/event caps, treasury ledger, chart markers, dividend payout path | Change votes and see a capped treasury trade and a marker appear on the chart |
 | 10 | **Realtime.** Live prices, trade feed, news and notifications with no page refresh | Two phones side by side, and a trade on one shows on the other |
@@ -116,12 +125,10 @@ The group gets the app only after milestone 13. You can still test every milesto
 
 ---
 
-## 6. Open questions (defaults in brackets; I'll use the default unless told otherwise)
+## 6. Open questions
 
-1. Starting play cash per person? [$10,000]
-2. Treasury and dividends: is fix #1 above OK? [Yes]
-3. Who can post on someone's feed? [Any group member who is a platform member. The subject can hide posts.]
-4. First-cut metrics and weights? [Vibe vote, superlatives, hangout attendance, feed activity and streaks, equally weighted]
-5. Are all beta members 18 or older? [Assumed yes. This matters for content and future legal structure.]
-6. Name for the beta? [Peerstock, as in the designs]
-7. Accounts you'll need to create when we reach milestone 0 (I'll walk you through each): **Supabase**, **Vercel** (sign in with GitHub) and optionally **Sentry**. All free.
+Answered Sep 27, 2026: $100 starting play cash, the treasury fix, subject-only posting with trade notes, all five metrics, everyone 18+, and the name Peerstock for now. Still open (defaults in brackets):
+
+1. The notes split the 5% fee between the subject and the platform. Should the subject keep a share now that the platform's revenue is the commission? [Yes: 2% to the subject, 3% to the platform, adjustable]
+2. Can the subject tag their own posts bullish or bearish? [No: drop the tag on posts. Trade notes already show whether the writer bought or sold.]
+3. Accounts you'll need to create when we reach milestone 0 (I'll walk you through each): **Supabase**, **Vercel** (sign in with GitHub) and optionally **Sentry**. All free.
