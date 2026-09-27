@@ -72,8 +72,9 @@ These are the points where the notes contradict themselves or where the math beh
     Members can still react and comment on posts. The subject can report trade notes on their page, and an admin can hide them. The "Feed activity" metric counts the subject's posts plus the reactions and comments those posts get.
 
 11. **Sliding trading fee.** The fee is a percentage that depends on trade size and goes to a platform account.
-    **Default:** smaller trades pay a higher rate. Under $5 pays 5%, $5–$25 pays 3%, and over $25 pays 2%. The admin can edit the tiers and turn fees on and off from the admin page. Each trade stores the rate it paid, so history stays accurate when the tiers change. While fees are off, trades cost 0%.
+    **Default:** smaller trades pay a higher rate. Under $5 pays 3%, $5–$25 pays 2%, and over $25 pays 1%. The admin can edit the tiers and turn fees on and off from the admin page. Each trade stores the rate it paid, so history stays accurate when the tiers change. While fees are off, trades cost 0%.
 12. **Bullish/Bearish voting on posts.** Every member except the poster can vote Bullish or Bearish on a post, one vote each, changeable. The post shows the vote split, e.g. "Bullish 7 · 2", and its tag reflects the majority. The tag reads "No votes yet" until someone votes. The poster sees the results but gets no vote buttons.
+    **Sentiment ratio per stock:** votes on all of a person's posts are combined into a Bullish-to-Bearish ratio, e.g. "3.5 : 1 bullish (78%)". The user picks the timeframe: 1D, 1W, 1M or All, like the other timeframe controls. A vote counts in the timeframe when it was cast or last changed. If there are no Bearish votes it shows "All bullish", and it shows "No votes" when there are none. The ratio appears as a stat tile on the stock page with its own timeframe switch, and on Watchlist rows and News items.
     **Default:** in the beta the votes are display-only and don't feed the fundamentals score. This can be added later as a metric.
 
 ---
@@ -108,8 +109,8 @@ The group gets the app only after milestone 13. You can still test every milesto
 | 3 | **Accounts and group.** Sign-in (magic link / Google), profile and avatar, invite-only group through an invite link, starting play cash, admin role | You invite a test account and it joins the group |
 | 4 | **Listing.** Opt-in consent, ticker choice, starting price from the initial score (offset v), treasury seed position, delist and relist | A friend opts in, gets $TICKER and appears as a stock |
 | 5 | **Trading.** Live quote, buy/sell with optional 140-character note, locked transactions, trades and price ticks, platform fee account, cash ledger, admin fee on/off switch and tier editor, admin "balances reconcile" check | Buy and sell. The numbers match the quote and the balances always add up. |
-| 6 | **Stock page.** Header, chart with 1D to All ranges and markers, stat tiles, trade panel, trade feed card, your position, and the Overview/Socials/Metrics/Markets/Holders tabs | Matches page 2 of the design |
-| 7 | **Feed and trade notes.** Subject-only text, photo and video posts with price at post, visible to everyone in the News feed. Members vote Bullish/Bearish on others' posts (not their own), react and comment. There is also and a separate Trade notes feed on each stock page. Trade notes can be reported; admins can hide them. | Post on your own page. Others see it in News, vote Bullish/Bearish, react, comment and leave trade notes. |
+| 6 | **Stock page.** Header, chart with 1D to All ranges and markers, stat tiles (including the Bullish:Bearish sentiment ratio with a timeframe switch), trade panel, trade feed card, your position, and the Overview/Socials/Metrics/Markets/Holders tabs | Matches page 2 of the design |
+| 7 | **Feed and trade notes.** Subject-only text, photo and video posts with price at post, visible to everyone in the News feed. Members vote Bullish/Bearish on others' posts (not their own), react and comment. There is also a separate Trade notes feed on each stock page. Trade notes can be reported; admins can hide them. | Post on your own page. Others see it in News, vote Bullish/Bearish, react, comment and leave trade notes. |
 | 8 | **Metrics.** Vibe votes (one change per 24 h), superlative polls, hangouts and check-ins, feed activity, streaks with photo proof, smoothed 0–100 scoring, weights with a group vote to change them, Metrics tab | Vote, and watch the fundamentals score update right away |
 | 9 | **Treasury.** 15-minute batch run, score-driven trades, 10%/day and 5%/event caps, treasury ledger, chart markers, dividend payout path | Change votes and see a capped treasury trade and a marker appear on the chart |
 | 10 | **Realtime.** Live prices, trade feed, news and notifications with no page refresh | Two phones side by side, and a trade on one shows on the other |
@@ -134,10 +135,10 @@ The group gets the app only after milestone 13. You can still test every milesto
 
 ## 6. Open questions
 
-Answered Sep 27, 2026: $100 starting play cash, the treasury fix, subject-only posting that everyone can see, trade notes, all five metrics, everyone 18+, and the name Peerstock for now. The trading fee varies with trade size, goes only to the platform, and the admin can turn it on and off. Posts carry a Bullish/Bearish tag that other members vote on.
+Answered Sep 27, 2026: $100 starting play cash, the treasury fix, subject-only posting that everyone can see, trade notes, all five metrics, everyone 18+, and the name Peerstock for now. The trading fee varies with trade size, goes only to the platform, and the admin can turn it on and off. Posts carry a Bullish/Bearish tag that other members vote on. The votes are combined into a sentiment ratio per stock over a timeframe the user chooses.
 
 Still open (defaults in brackets):
 
-1. Fee tiers. [Under $5: 5%, $5–$25: 3%, over $25: 2%; editable by the admin]
+1. Fee tiers. [Under $5: 3%, $5–$25: 2%, over $25: 1%; editable by the admin]
 2. Should post sentiment votes feed the fundamentals score? [Not in the beta; revisit after the two-week test]
 3. Accounts you'll need to create when we reach milestone 0 (I'll walk you through each): **Supabase**, **Vercel** (sign in with GitHub) and optionally **Sentry**. All free.
