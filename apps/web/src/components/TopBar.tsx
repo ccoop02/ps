@@ -2,13 +2,7 @@ import Link from "next/link";
 import { Bell, Search } from "lucide-react";
 import { formatCents } from "@peerstock/shared";
 import { Logo } from "./Logo";
-
-export const nav = [
-  { href: "/", label: "Home" },
-  { href: "/markets", label: "Markets" },
-  { href: "/portfolio", label: "Portfolio" },
-  { href: "/baskets", label: "Baskets" },
-];
+import { TopNavLinks } from "./NavLinks";
 
 export function TopBar({ cashCents }: { cashCents: number }) {
   return (
@@ -17,22 +11,7 @@ export function TopBar({ cashCents }: { cashCents: number }) {
         <Link href="/" aria-label="Home">
           <Logo />
         </Link>
-        <nav className="hidden items-center gap-1 md:flex">
-          {nav.map((item, i) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={
-                "rounded-lg px-3 py-1.5 text-sm " +
-                (i === 0
-                  ? "bg-surface-raised text-white"
-                  : "text-muted hover:text-white")
-              }
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <TopNavLinks />
         <label className="ml-2 hidden flex-1 items-center gap-2 rounded-lg border border-line bg-surface px-3 py-1.5 text-sm text-muted lg:flex">
           <Search size={16} />
           <input
@@ -64,21 +43,3 @@ export function TopBar({ cashCents }: { cashCents: number }) {
   );
 }
 
-/** Phone-width navigation, pinned to the bottom of the screen. */
-export function BottomNav() {
-  return (
-    <nav className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-4 border-t border-line bg-bg/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
-      {nav.map((item, i) => (
-        <Link
-          key={item.href}
-          href={item.href}
-          className={
-            "py-3 text-center text-xs " + (i === 0 ? "text-lime" : "text-muted")
-          }
-        >
-          {item.label}
-        </Link>
-      ))}
-    </nav>
-  );
-}

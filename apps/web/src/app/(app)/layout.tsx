@@ -1,4 +1,5 @@
-import { BottomNav, TopBar } from "@/components/TopBar";
+import { BottomNav } from "@/components/NavLinks";
+import { TopBar } from "@/components/TopBar";
 
 /** Every beta member starts with $100 of play cash. Real balances arrive in milestone 3. */
 const PLACEHOLDER_CASH_CENTS = 100_00;

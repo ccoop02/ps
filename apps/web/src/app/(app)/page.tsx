@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { CheckCircle2, CircleDashed, XCircle } from "lucide-react";
+import { sql } from "@peerstock/db";
+import { getDb } from "@/lib/db";
 import { checkSupabaseConnection, type ConnectionStatus } from "@/lib/supabase-config";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +25,7 @@ const milestones = [
 ];
 const CURRENT_MILESTONE = 2;
 
-function StatusRow({ label, status }: { label: string; status: ConnectionStatus }) {
+function StatusRow({ label, status, note }: { label: string; status: ConnectionStatus; note?: string }) {
   const view = {
     connected: { icon: <CheckCircle2 className="text-lime" size={18} />, text: "Connected" },
     "not-configured": {
@@ -38,6 +40,7 @@ function StatusRow({ label, status }: { label: string; status: ConnectionStatus 
       <span className="flex items-center gap-2 text-sm">
         {view.icon}
         {view.text}
+        {note && <span className="text-muted">· {note}</span>}
         {status.state === "error" && (
           <span className="text-muted">({status.detail})</span>
         )}
@@ -46,8 +49,22 @@ function StatusRow({ label, status }: { label: string; status: ConnectionStatus 
   );
 }
 
+async function checkTables(): Promise<{ status: ConnectionStatus; note?: string }> {
+  const db = getDb();
+  if (!db) return { status: { state: "not-configured" } };
+  try {
+    const [row] = await db.execute<{ stocks: number }>(
+      sql`select count(*)::int as stocks from subjects where status = 'listed'`,
+    );
+    return { status: { state: "connected" }, note: `${row?.stocks ?? 0} stocks listed` };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Query failed";
+    return { status: { state: "error", detail: message.slice(0, 80) } };
+  }
+}
+
 export default async function HomePage() {
-  const supabase = await checkSupabaseConnection();
+  const [supabase, tables] = await Promise.all([checkSupabaseConnection(), checkTables()]);
 
   return (
     <div className="space-y-6">
@@ -62,6 +79,7 @@ export default async function HomePage() {
           <div className="mt-3 divide-y divide-line">
             <StatusRow label="App (Vercel)" status={{ state: "connected" }} />
             <StatusRow label="Database (Supabase)" status={supabase} />
+            <StatusRow label="Tables and data" status={tables.status} note={tables.note} />
           </div>
         </section>
 
