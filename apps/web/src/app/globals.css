@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Brand tokens; keep in sync with packages/shared/src/brand.ts */
+@theme {
+  --color-bg: #0b0814;
+  --color-surface: #141022;
+  --color-surface-raised: #1c1730;
+  --color-line: #2a2440;
+  --color-muted: #9a93b5;
+  --color-lime: #c6ff4d;
+  --color-pink: #ff4d8d;
+  --color-violet: #7c5cff;
+  --color-cyan: #5ce1ff;
+
+  --font-display: var(--font-unbounded), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-bg);
+  color: #fff;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
