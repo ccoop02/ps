@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CheckCircle2, CircleDashed, XCircle } from "lucide-react";
 import { checkSupabaseConnection, type ConnectionStatus } from "@/lib/supabase-config";
 
@@ -20,7 +21,7 @@ const milestones = [
   "Hardening",
   "Two-week beta",
 ];
-const CURRENT_MILESTONE = 0;
+const CURRENT_MILESTONE = 2;
 
 function StatusRow({ label, status }: { label: string; status: ConnectionStatus }) {
   const view = {
@@ -82,6 +83,12 @@ export default async function HomePage() {
               </li>
             ))}
           </ol>
+          <Link
+            href="/playground"
+            className="mt-4 inline-block rounded-lg bg-lime px-4 py-2 text-sm font-semibold text-black"
+          >
+            Try the curve playground
+          </Link>
         </section>
       </div>
     </div>
