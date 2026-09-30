@@ -29,3 +29,4 @@ Short record of choices made while building, so anyone picking up the code knows
 - The GitHub workflow "Database" runs migrations and then the idempotent demo seed on pushes to `main` or `claude/**` that touch `packages/db`. It uses the repository secret `DATABASE_URL`.
 - The demo group "Demo friends" (10 people from the designs, 30 days of simulated trading) is for testing only. Remove it before inviting the real group with `pnpm --filter @peerstock/db seed --remove`.
 - `DATABASE_URL` is Supabase's transaction pooler string (port 6543). Prepared statements are off, as the pooler requires.
+- Every Vercel environment variable must be enabled for both **Production and Preview**, or preview links won't see it. Vercel's Add dialog defaults to Production only. Deployments only pick up variable changes when they're rebuilt.
