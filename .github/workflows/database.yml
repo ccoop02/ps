@@ -1,0 +1,36 @@
+name: Database
+
+# Applies migrations to the Supabase database, then adds demo data if missing.
+# Needs the repository secret DATABASE_URL (Supabase transaction pooler string).
+on:
+  push:
+    branches: [main, "claude/**"]
+    paths: ["packages/db/**", ".github/workflows/database.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: database
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+      - name: Check the secret is set
+        if: env.DATABASE_URL == ''
+        run: |
+          echo "::error::The DATABASE_URL secret isn't set. Add it under Settings -> Secrets and variables -> Actions."
+          exit 1
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Apply migrations
+        run: pnpm --filter @peerstock/db migrate
+      - name: Add demo data if missing
+        run: pnpm --filter @peerstock/db seed

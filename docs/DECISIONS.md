@@ -18,3 +18,15 @@ Short record of choices made while building, so anyone picking up the code knows
 - Treasury caps: 0.2% per score point; events move sentiment x 5% (min 3 votes); max 5% per event; max 10% per stock per day in total (sum of absolute moves).
 - Dividends are split pro rata by holdings, with exact rounding (largest remainder), so the pieces always add up to the total.
 - Every trade will store the engine version `curve-v1`.
+
+## Milestone 2: Database (Sep 29, 2026)
+
+- Schema lives in `packages/db/src/schema.ts` (Drizzle ORM). Migrations are generated into `packages/db/migrations` with `pnpm --filter @peerstock/db generate`. The generated init migration must not create `auth.users`, because Supabase owns it.
+- Row-level security is on for every table, with no policies. The browser's public key can't touch data; the server connects with `DATABASE_URL` and acts for users. A test fails if any table lacks RLS, so new tables need `ENABLE ROW LEVEL SECURITY` in their migration.
+- Cash lives on `profiles.cash_cents` (a user-level wallet, which suits real deposits later). Every change is also written to `ledger_entries`. Platform fee income and treasury-issued play money are ledger accounts too.
+- Supabase login accounts link to `profiles.auth_user_id`. Demo people have no login and are flagged `is_demo`.
+- `reconcile()` checks that cash matches the ledger, supply and reserve match the trade history, and holdings plus treasury equal supply.
+- The GitHub workflow "Database" runs migrations and then the idempotent demo seed on pushes to `main` or `claude/**` that touch `packages/db`. It uses the repository secret `DATABASE_URL`.
+- The demo group "Demo friends" (10 people from the designs, 30 days of simulated trading) is for testing only. Remove it before inviting the real group with `pnpm --filter @peerstock/db seed --remove`.
+- `DATABASE_URL` is Supabase's transaction pooler string (port 6543). Prepared statements are off, as the pooler requires.
+- Every Vercel environment variable must be enabled for both **Production and Preview**, or preview links won't see it. Vercel's Add dialog defaults to Production only. Deployments only pick up variable changes when they're rebuilt.

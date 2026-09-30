@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatCents, formatPercentChange, formatSignedCents } from "./format";
+import { formatCents, formatMicroUsd, formatPercentChange, formatSignedCents } from "./format";
 
 describe("formatCents", () => {
   it("formats whole cents as dollars", () => {
@@ -26,5 +26,12 @@ describe("formatPercentChange", () => {
     expect(formatPercentChange(0.079)).toBe("+7.9%");
     expect(formatPercentChange(-0.092)).toBe("-9.2%");
     expect(formatPercentChange(0)).toBe("0.0%");
+  });
+});
+
+describe("formatMicroUsd", () => {
+  it("shows dollars and cents", () => {
+    expect(formatMicroUsd(2_161_000n)).toBe("$2.16");
+    expect(formatMicroUsd(42_180_000)).toBe("$42.18");
   });
 });
